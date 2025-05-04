@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
@@ -9,12 +10,20 @@ namespace WebApplication1.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly HttpClient _httpClient;
-    private const string ApiKey = "f26e83f3ee2c206b2f37012ecde654b9";
+
     private const string BaseUrl = "https://api.themoviedb.org/3";
 
-    public MovieController(IHttpClientFactory httpClientFactory)
+    private readonly string? ApiKey;
+
+
+    public MovieController(IHttpClientFactory httpClientFactory, IConfiguration config)
     {
         _httpClient = httpClientFactory.CreateClient();
+        if (string.IsNullOrEmpty(ApiKey))
+        {
+            ApiKey = config["TMDB_API_KEY"]
+                   ?? throw new InvalidOperationException("TMDB_API_KEY not set.");
+        }
     }
 
     [HttpGet("discover")]

@@ -12,13 +12,14 @@ builder.Services.AddHttpClient(); // Register IHttpClientFactory for dependency 
 var app = builder.Build();  // Configure the HTTP request pipeline. The default is to use the Microsoft.AspNetCore.Mvc.NewtonsoftJson package for JSON serialization.
 
 // Configure the HTTP request pipeline for development and production environments
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection(); // Enable HTTPS redirection + This is the default behavior in ASP.NET Core applications.
+app.MapGet("/", () => "API is running!");
 
 app.UseAuthorization(); // Enable authorization middleware + This is the default behavior in ASP.NET Core applications.
 
